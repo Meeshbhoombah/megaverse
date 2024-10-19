@@ -6,26 +6,35 @@
  *
  */
 
-import * as http from 'http';
 import * as https from 'https';
+import * as fs from 'fs';
 import * as process from 'process';
 
-const API = 'https://challenge.crossmint.com/api'
+
+const API = 'https://challenge.crossmint.com/api';
 const GOAL = API + `/map/${process.env.CANDIDATE_ID}/goal`;
 
-// The Goal map is hidden behind an endpoint that can be fetched with a simple 
-// HTTP `GET` request. This map is simply JSON data that can be parsed into an
-// Matrix of "Rows" and "Columns."
-https.get(GOAL, (res) => {
-    res.on('data', (data) => {
+const MAKE_REQUEST = process.env.MAKE_REQUEST;
 
+
+// The Goal map can be fetched with a HTTP `GET` request to the service's
+// endpoint, `/api/map.` This map is formatted as JSON data. When parsed, 
+// it creates a 2D space, or an array-based matrix, of "Rows" and "Columns."
+https.get(GOAL, (res) => {
+
+    let rawMap = ""
+    res.on('data', (data) => {
         // Upon inspecting the headers of responses from Crossmint's Megaverse 
         // service, I found the character set to be `utf-8.` As a result, we can 
         // simply convert incoming raw data buffers from Crossmint via `utf-8`, 
         // as is necessary when making `https` requests with `Node.`
-        let rawMap = data.toString('utf8');
+        rawMap += data.toString('utf-8');
+    });
 
-        // The Goal map is a raw JSON, hidden behind a key, "goal"
+    res.on('end', async() => {
+        console.log(rawMap);
+
+        // The Goal map is raw JSON, hidden behind a key, "goal"
         let map = JSON.parse(rawMap).goal;
 
         // The 2D spaces that are creatable by making `POST` requests to 
@@ -34,17 +43,23 @@ https.get(GOAL, (res) => {
         let columnNumber = 0;
 
         for (let row of map) {
+            for (let entity of row) {
 
-            for (let column of row) {
-
-                if (column == 'SPACE') {
+                // We draw the Goal map as it is parsed for visual confirmation
+                // in the running process' Command Line Interface, using 
+                // `process.stdout.write` in place of `console.log` so that we
+                // can easily format the output to mimic the drawing of a map
+                // as is presented by Crossmint's Megaverse service (can be
+                // found at `https://challenge.crossmint.com/challenge`
+                if (entity == 'SPACE') {
                     process.stdout.write('🌌 ');
                 } 
 
-                if (column == 'POLYANET') {
-                    process.stdout.write('🪐 ') 
+                if (entity == 'POLYANET') {
+                    process.stdout.write('🪐 ');
                 }
 
+                // Move to the next column
                 columnNumber++; 
             }
 
@@ -53,49 +68,52 @@ https.get(GOAL, (res) => {
             // Reset column numbering for the next row in the 2D space
             columnNumber = 0;
 
+            // Move to the next row
             rowNumber++;
         }
 
         process.stdout.write('\n');
     });
+
 });
 
+async function post(endpoint: string, rowNumber: number, columnNumber: number) {
 
-const POST_DATA = JSON.stringify({
-    row: 4,
-    column: 4,
-    candidateId: process.env.CANDIDATE_ID
-});
+    let data = JSON.stringify({
+        row: rowNumber,
+        column: columnNumber, 
+        candidateId: process.env.CANDIDATE_ID
+    });
 
-const options = {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(POST_DATA),
-    },
+    let options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(data),
+        }
+    };
+
+    let req = await https.request(API + endpoint, options, (res) => {
+
+        console.log(res.statusCode);
+        console.log(res.headers);
+
+        if (res.statusCode == 429) {
+            setTimeout(post, 3000, endpoint, rowNumber, columnNumber);
+        }
+
+        res.on('data', (d) => {
+            process.stdout.write(d);
+        });
+
+    });
+
+    req.on('error', (e) => {
+        console.error('`POST` request error: ', e.message);
+    });
+
+    await req.write(data);
+    await req.end();
+
 };
-
-const req = https.request('https://challenge.crossmint.com/api/polyanets', options, (res) => {
-    console.log(`STATUS: ${res.statusCode}`);
-    console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
-    res.setEncoding('utf8');
-
-    res.on('data', (chunk) => {
-        console.log(`BODY: ${chunk}`);
-    });
-
-    res.on('end', () => {
-        console.log('No more data in response.');
-    });
-});
-
-req.on('error', (e) => {
-    console.error(`problem with request: ${e.message}`);
-});
-
-// Write data to request body
-req.write(POST_DATA);
-req.end();
-
-console.log(req);
 
