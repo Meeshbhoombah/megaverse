@@ -4,7 +4,7 @@
   "description": "Mint a Megaverse with Crossmint's Megaverse service",
   "main": "dist/app.js",
   "scripts": {
-    "start": "npx tsc && node dist/app.js --env-file .env"
+    "start": "npx tsc && node --env-file .env dist/app.js"
   },
   "repository": {
     "type": "git",
