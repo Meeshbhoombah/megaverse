@@ -49,6 +49,64 @@ https.get(GOAL, (res) => {
 
         for (let row of map) {
             for (let entity of row) {
+
+                /*
+                let endpoint!: string;
+                let opts!: object;
+
+                if (entity == 'POLYANET') {
+                    endpoint = '/polyanets'; 
+                }
+
+                if (entity.slice(-5) == 'SOLOON') {
+                    endpoint = '/soloons';
+                    
+                    switch(entity[0]) {
+                        case 'B': {
+                            opts = { color: 'blue' };
+                            break;
+                        },
+                        case 'R': {
+                            opts = { color: 'red' };
+                            break;
+                        },
+                        case 'P': {
+                            opts = { color: 'purple' };
+                            break;
+                        },
+                        case 'W': {
+                            opts = { color: 'white' };
+                            break;
+                        },
+                    }
+                }
+
+                if (entity.slice(-5) == 'COMETH') {
+                    endpoint = '/comeths';
+
+                    switch(entity[0]) {
+                        case 'U': {
+                            opts = { direction: 'up' };
+                            break;
+                        },
+                        case 'D': {
+                            opts = { direction: 'down' };
+                            break;
+                        },
+                        case 'L': {
+                            opts = { direction: 'left' };
+                            break;
+                        },
+                        case 'R': {
+                            opts = { direction: 'right' };
+                            break;
+                        },
+                    }
+                }
+
+                post(endpoint, columnNumber, rowNumber, opts);
+                */
+
                 // We draw the Goal map as it is parsed for visual confirmation
                 // in the running process' Command Line Interface, using 
                 // `process.stdout.write` in place of `console.log` so that we
