@@ -22,17 +22,22 @@ const MAKE_REQUEST = process.env.MAKE_REQUEST;
 // it creates a 2D space, or an array-based matrix, of "Rows" and "Columns."
 https.get(GOAL, (res) => {
 
-    let rawMap = ""
+    // The readable stream for the Goal map's response can be a set of chunks,
+    // thus we must read all parts of it (i.e: `res.on('data', ...`) before we
+    // can, upon the response's end, take action on the Goal map
+    
+    let rawMap = "";
     res.on('data', (data) => {
+
         // Upon inspecting the headers of responses from Crossmint's Megaverse 
         // service, I found the character set to be `utf-8.` As a result, we can 
         // simply convert incoming raw data buffers from Crossmint via `utf-8`, 
         // as is necessary when making `https` requests with `Node.`
         rawMap += data.toString('utf-8');
+
     });
 
     res.on('end', async() => {
-        console.log(rawMap);
 
         // The Goal map is raw JSON, hidden behind a key, "goal"
         let map = JSON.parse(rawMap).goal;
@@ -51,6 +56,9 @@ https.get(GOAL, (res) => {
                 // can easily format the output to mimic the drawing of a map
                 // as is presented by Crossmint's Megaverse service (can be
                 // found at `https://challenge.crossmint.com/challenge`
+
+
+                /*
                 if (entity == 'SPACE') {
                     process.stdout.write('🌌 ');
                 } 
@@ -58,11 +66,13 @@ https.get(GOAL, (res) => {
                 if (entity == 'POLYANET') {
                     process.stdout.write('🪐 ');
                 }
+                */
 
                 // Move to the next column
                 columnNumber++; 
             }
 
+            // End of a row in our output is demarcated with a new line
             process.stdout.write('\n');
 
             // Reset column numbering for the next row in the 2D space
@@ -73,6 +83,7 @@ https.get(GOAL, (res) => {
         }
 
         process.stdout.write('\n');
+
     });
 
 });
@@ -93,6 +104,7 @@ async function post(endpoint: string, rowNumber: number, columnNumber: number) {
         }
     };
 
+
     let req = await https.request(API + endpoint, options, (res) => {
 
         console.log(res.statusCode);
@@ -109,7 +121,9 @@ async function post(endpoint: string, rowNumber: number, columnNumber: number) {
     });
 
     req.on('error', (e) => {
+
         console.error('`POST` request error: ', e.message);
+
     });
 
     await req.write(data);
