@@ -220,7 +220,7 @@ function post(
     let req = https.request(API + endpoint, options, (res) => {
         console.log(res.statusCode);
         if (res.statusCode == 429) {
-            setTimeout(post, 3000, endpoint, rowNumber, columnNumber, opts);
+            post(endpoint, rowNumber, columnNumber, opts);
         }
     });
 
