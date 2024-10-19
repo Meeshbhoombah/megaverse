@@ -1,0 +1,19 @@
+{
+  "name": "megaverse",
+  "version": "1.0.0",
+  "description": "Mint a Megaverse with Crossmint's Megaverse service",
+  "main": "app.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Meeshbhoombah/megaverse.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Meeshbhoombah/megaverse/issues"
+  },
+  "homepage": "https://github.com/Meeshbhoombah/megaverse#readme",
+  "dependencies": {
+    "@types/node": "^22.7.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}
