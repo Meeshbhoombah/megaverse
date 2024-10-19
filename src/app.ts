@@ -64,6 +64,38 @@ https.get(GOAL, (res) => {
                         process.stdout.write('🪐 ');
                         break;
                     }
+                    case 'BLUE_SOLOON': {
+                        process.stdout.write('🌕 ');
+                        break;
+                    }
+                    case 'RED_SOLOON': {
+                        process.stdout.write('🌕 ');
+                        break;
+                    }
+                    case 'PURPLE_SOLOON': {
+                        process.stdout.write('🌕 ');
+                        break;
+                    }
+                    case 'WHITE_SOLOON': {
+                        process.stdout.write('🌕 ');
+                        break;
+                    }
+                    case 'UP_COMETH': {
+                        process.stdout.write('☄️ ');
+                        break;
+                    }
+                    case 'DOWN_COMETH': {
+                        process.stdout.write('☄️ ');
+                        break;
+                    }
+                    case 'LEFT_COMETH': {
+                        process.stdout.write('☄️ ');
+                        break;
+                    }
+                    case 'RIGHT_COMETH': {
+                        process.stdout.write('☄️ ');
+                        break;
+                    }
                 }
 
                 // Move to the next column
