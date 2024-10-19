@@ -24,13 +24,8 @@ Copy `env`, rename it to `.env`, and add a candidate ID.
 ```
 ```
 
-Compile megaverse.
+Start megaverse
 ```
-npx tsc
-```
-
-Run the script.
-```
-node dist/app.js
+npm start
 ```
 
