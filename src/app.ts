@@ -60,40 +60,58 @@ https.get(GOAL, (res) => {
                         process.stdout.write('🌌 ');                   
                         break; 
                     }
+
                     case 'POLYANET': {
                         process.stdout.write('🪐 ');
+                        post('/polyanets', rowNumber, columnNumber);
                         break;
                     }
+
                     case 'BLUE_SOLOON': {
                         process.stdout.write('🌕 ');
+                        post('/soloons', rowNumber, columnNumber, { color: "blue" });
                         break;
                     }
+
                     case 'RED_SOLOON': {
                         process.stdout.write('🌕 ');
+                        post('/soloons', rowNumber, columnNumber, { color: "red" });
                         break;
                     }
+
                     case 'PURPLE_SOLOON': {
                         process.stdout.write('🌕 ');
+                        post('/soloons', rowNumber, columnNumber, { color: "purple" });
                         break;
                     }
+
                     case 'WHITE_SOLOON': {
+                        post('/soloons', rowNumber, columnNumber, { color: "white" });
                         process.stdout.write('🌕 ');
                         break;
                     }
+
                     case 'UP_COMETH': {
                         process.stdout.write('☄️ ');
+                        post('/comeths', rowNumber, columnNumber, { direction: "up" });
                         break;
                     }
+
                     case 'DOWN_COMETH': {
                         process.stdout.write('☄️ ');
+                        post('/comeths', rowNumber, columnNumber, { direction: "down" });
                         break;
                     }
+
                     case 'LEFT_COMETH': {
                         process.stdout.write('☄️ ');
+                        post('/comeths', rowNumber, columnNumber, { direction: "left" });
                         break;
                     }
+
                     case 'RIGHT_COMETH': {
-                        process.stdout.write('☄️ ');
+                        process.stdout.write('☄️');
+                        post('/comeths', rowNumber, columnNumber, { direction: "right" });
                         break;
                     }
                 }
@@ -119,12 +137,18 @@ https.get(GOAL, (res) => {
 });
 
 
-async function post(endpoint: string, rowNumber: number, columnNumber: number) {
+function post(
+    endpoint: string, 
+    rowNumber: number, 
+    columnNumber: number,
+    opts?: object,
+) {
 
     let data = JSON.stringify({
         row: rowNumber,
         column: columnNumber, 
-        candidateId: process.env.CANDIDATE_ID
+        candidateId: process.env.CANDIDATE_ID,
+        ...opts
     });
 
     let options = {
@@ -135,30 +159,20 @@ async function post(endpoint: string, rowNumber: number, columnNumber: number) {
         }
     };
 
-
-    let req = await https.request(API + endpoint, options, (res) => {
-
+    let req = https.request(API + endpoint, options, (res) => {
         console.log(res.statusCode);
-        console.log(res.headers);
-
         if (res.statusCode == 429) {
-            setTimeout(post, 3000, endpoint, rowNumber, columnNumber);
+            setTimeout(post, 3000, endpoint, rowNumber, columnNumber, opts);
         }
-
-        res.on('data', (d) => {
-            process.stdout.write(d);
-        });
-
     });
 
     req.on('error', (e) => {
-
         console.error('`POST` request error: ', e.message);
-
     });
 
-    await req.write(data);
-    await req.end();
+    req.write(data);
+    req.end();
 
 };
+
 
