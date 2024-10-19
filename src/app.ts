@@ -60,17 +60,14 @@ https.get(GOAL, (res) => {
     });
 });
 
+
 const POST_DATA = JSON.stringify({
-    'row': '2',
-    'column': '2',
-    'candidateId': `process.env.CANDIDATE_ID`
+    row: 4,
+    column: 4,
+    candidateId: process.env.CANDIDATE_ID
 });
 
-let hostname = `crossmint.challenge.com`;
-
 const options = {
-    hostname,
-    path: `/api/polyanets`,
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -78,9 +75,7 @@ const options = {
     },
 };
 
-console.log(options);
-
-const req = http.request(options, (res) => {
+const req = https.request('https://challenge.crossmint.com/api/polyanets', options, (res) => {
     console.log(`STATUS: ${res.statusCode}`);
     console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
     res.setEncoding('utf8');
@@ -101,4 +96,6 @@ req.on('error', (e) => {
 // Write data to request body
 req.write(POST_DATA);
 req.end();
+
+console.log(req);
 
