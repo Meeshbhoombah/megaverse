@@ -26,6 +26,8 @@ https.get(GOAL, (res) => {
         // The Goal map is a raw JSON, hidden behind a key, "goal"
         let map = JSON.parse(rawMap).goal;
 
+        // The 2D spaces that are creatable by making `POST` requests to 
+        // Crossmint's Megaverse service are 
         let rowNumber = 0;
         let columnNumber = 0;
 
@@ -38,7 +40,7 @@ https.get(GOAL, (res) => {
                 columnNumber++; 
             }
 
-            // Reset column numbering for the next row
+            // Reset column numbering for the next row in the 2D space
             columnNumber = 0;
 
             rowNumber++;
