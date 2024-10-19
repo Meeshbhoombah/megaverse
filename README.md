@@ -6,8 +6,9 @@ Megaverse creator API to build Maps of various "astral objects" (emojis).
 
 ## Getting Started
 ### Prequisites
-- NPM
-- Node
+- `npm`
+- `npx`
+- `node`
 
 ### Installation
 Clone this repository.

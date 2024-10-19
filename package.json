@@ -2,7 +2,10 @@
   "name": "megaverse",
   "version": "1.0.0",
   "description": "Mint a Megaverse with Crossmint's Megaverse service",
-  "main": "app.ts",
+  "main": "dist/app.js",
+  "scripts": {
+    "start": "npx tsc && node dist/app.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Meeshbhoombah/megaverse.git"
