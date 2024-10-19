@@ -49,24 +49,22 @@ https.get(GOAL, (res) => {
 
         for (let row of map) {
             for (let entity of row) {
-
                 // We draw the Goal map as it is parsed for visual confirmation
                 // in the running process' Command Line Interface, using 
                 // `process.stdout.write` in place of `console.log` so that we
                 // can easily format the output to mimic the drawing of a map
                 // as is presented by Crossmint's Megaverse service (can be
                 // found at `https://challenge.crossmint.com/challenge`
-
-
-                /*
-                if (entity == 'SPACE') {
-                    process.stdout.write('🌌 ');
-                } 
-
-                if (entity == 'POLYANET') {
-                    process.stdout.write('🪐 ');
+                switch (entity) {
+                    case 'SPACE': {
+                        process.stdout.write('🌌 ');                   
+                        break; 
+                    }
+                    case 'POLYANET': {
+                        process.stdout.write('🪐 ');
+                        break;
+                    }
                 }
-                */
 
                 // Move to the next column
                 columnNumber++; 
@@ -87,6 +85,7 @@ https.get(GOAL, (res) => {
     });
 
 });
+
 
 async function post(endpoint: string, rowNumber: number, columnNumber: number) {
 
