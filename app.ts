@@ -50,12 +50,12 @@ https.get(GOAL, (res) => {
         for (let row of map) {
             for (let entity of row) {
 
-                /*
                 let endpoint!: string;
                 let opts!: object;
 
                 if (entity == 'POLYANET') {
                     endpoint = '/polyanets'; 
+                    process.stdout.write('🪐 ');
                 }
 
                 if (entity.slice(-5) == 'SOLOON') {
@@ -65,20 +65,22 @@ https.get(GOAL, (res) => {
                         case 'B': {
                             opts = { color: 'blue' };
                             break;
-                        },
+                        }
                         case 'R': {
                             opts = { color: 'red' };
                             break;
-                        },
+                        }
                         case 'P': {
                             opts = { color: 'purple' };
                             break;
-                        },
+                        } 
                         case 'W': {
                             opts = { color: 'white' };
                             break;
-                        },
+                        }
                     }
+
+                    process.stdout.write('🌕 ');
                 }
 
                 if (entity.slice(-5) == 'COMETH') {
@@ -88,24 +90,29 @@ https.get(GOAL, (res) => {
                         case 'U': {
                             opts = { direction: 'up' };
                             break;
-                        },
+                        }
                         case 'D': {
                             opts = { direction: 'down' };
                             break;
-                        },
+                        }
                         case 'L': {
                             opts = { direction: 'left' };
                             break;
-                        },
+                        }
                         case 'R': {
                             opts = { direction: 'right' };
                             break;
-                        },
+                        }
                     }
+
+                    process.stdout.write('☄️ ');
                 }
 
-                post(endpoint, columnNumber, rowNumber, opts);
-                */
+                if (entity == 'SPACE') {
+                    process.stdout.write('🌌 ');                
+                };
+
+                // post(endpoint, columnNumber, rowNumber, opts);
 
                 // We draw the Goal map as it is parsed for visual confirmation
                 // in the running process' Command Line Interface, using 
@@ -113,6 +120,7 @@ https.get(GOAL, (res) => {
                 // can easily format the output to mimic the drawing of a map
                 // as is presented by Crossmint's Megaverse service (can be
                 // found at `https://challenge.crossmint.com/challenge`
+                /*
                 switch (entity) {
                     case 'SPACE': {
                         process.stdout.write('🌌 ');                   
@@ -173,6 +181,7 @@ https.get(GOAL, (res) => {
                         break;
                     }
                 }
+                */
 
                 // Move to the next column
                 columnNumber++; 
