@@ -28,17 +28,14 @@ https.get(GOAL, (res) => {
     
     let rawMap = "";
     res.on('data', (data) => {
-
         // Upon inspecting the headers of responses from Crossmint's Megaverse 
         // service, I found the character set to be `utf-8.` As a result, we can 
         // simply convert incoming raw data buffers from Crossmint via `utf-8`, 
         // as is necessary when making `https` requests with `Node.`
         rawMap += data.toString('utf-8');
-
     });
 
     res.on('end', async() => {
-
         // The Goal map is raw JSON, hidden behind a key, "goal"
         let map = JSON.parse(rawMap).goal;
 
@@ -198,7 +195,6 @@ https.get(GOAL, (res) => {
         }
 
         process.stdout.write('\n');
-
     });
 
 });
