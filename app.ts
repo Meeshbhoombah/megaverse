@@ -46,7 +46,8 @@ https.get(GOAL, (res) => {
     });
 
     res.on('end', async() => {
-        // The Goal map is raw JSON, hidden behind a key, "goal"
+        // The Goal map is raw JSON string, with its workable contents hidden 
+        // behind a key, "goal"
         let map = JSON.parse(rawMap).goal;
 
         // The 2D spaces that are creatable by making `POST` requests to 
@@ -54,9 +55,15 @@ https.get(GOAL, (res) => {
         let rowNumber = 0;
         let columnNumber = 0;
 
+        // Iterate over the Goal Map string-based array Matrix to get to each
+        // entity contained within the map
         for (let row of map) {
             for (let entity of row) {
 
+                // To create the final submittable Map with Crossmint's 
+                // megaverse service, we need to `POST` each individual entity
+                // to its corresponding `endpoint,` as is specified by
+                // Crossmint's provided API 
                 let endpoint!: string;
                 let opts!: object;
 
