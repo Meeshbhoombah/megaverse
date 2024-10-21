@@ -1,8 +1,10 @@
 /**
+ *
  * src/app.ts
  *
- * Makes requests to Crossmint's Megaverse service to build a map based off the 
- * Goal map provided by Crossmint. 
+ * Makes `POST` requests to Crossmint's Megaverse service to build a map
+ *
+ *
  *
  */
 
@@ -22,11 +24,10 @@ const MAKE_REQUEST = process.env.MAKE_REQUEST;
 // it creates a 2D space, or an array-based matrix, of "Rows" and "Columns."
 https.get(GOAL, (res) => {
 
+    let rawMap = "";
     // The readable stream for the Goal map's response can be a set of chunks,
     // thus we must read all parts of it (i.e: `res.on('data', ...`) before we
     // can, upon the response's end, take action on the Goal map
-    
-    let rawMap = "";
     res.on('data', (data) => {
         // Upon inspecting the headers of responses from Crossmint's Megaverse 
         // service, I found the character set to be `utf-8.` As a result, we can 
@@ -109,76 +110,7 @@ https.get(GOAL, (res) => {
                     process.stdout.write('🌌 ');                
                 };
 
-                // post(endpoint, columnNumber, rowNumber, opts);
-
-                // We draw the Goal map as it is parsed for visual confirmation
-                // in the running process' Command Line Interface, using 
-                // `process.stdout.write` in place of `console.log` so that we
-                // can easily format the output to mimic the drawing of a map
-                // as is presented by Crossmint's Megaverse service (can be
-                // found at `https://challenge.crossmint.com/challenge`
-                /*
-                switch (entity) {
-                    case 'SPACE': {
-                        process.stdout.write('🌌 ');                   
-                        break; 
-                    }
-
-                    case 'POLYANET': {
-                        process.stdout.write('🪐 ');
-                        post('/polyanets', rowNumber, columnNumber);
-                        break;
-                    }
-
-                    case 'BLUE_SOLOON': {
-                        process.stdout.write('🌕 ');
-                        post('/soloons', rowNumber, columnNumber, { color: "blue" });
-                        break;
-                    }
-
-                    case 'RED_SOLOON': {
-                        process.stdout.write('🌕 ');
-                        post('/soloons', rowNumber, columnNumber, { color: "red" });
-                        break;
-                    }
-
-                    case 'PURPLE_SOLOON': {
-                        process.stdout.write('🌕 ');
-                        post('/soloons', rowNumber, columnNumber, { color: "purple" });
-                        break;
-                    }
-
-                    case 'WHITE_SOLOON': {
-                        post('/soloons', rowNumber, columnNumber, { color: "white" });
-                        process.stdout.write('🌕 ');
-                        break;
-                    }
-
-                    case 'UP_COMETH': {
-                        process.stdout.write('☄️ ');
-                        post('/comeths', rowNumber, columnNumber, { direction: "up" });
-                        break;
-                    }
-
-                    case 'DOWN_COMETH': {
-                        process.stdout.write('☄️ ');
-                        post('/comeths', rowNumber, columnNumber, { direction: "down" });
-                        break;
-                    }
-
-                    case 'LEFT_COMETH': {
-                        process.stdout.write('☄️ ');
-                        post('/comeths', rowNumber, columnNumber, { direction: "left" });
-                        break;
-                    }
-
-                    case 'RIGHT_COMETH': {
-                        process.stdout.write('☄️');
-                        post('/comeths', rowNumber, columnNumber, { direction: "right" });
-                        break;
-                    }
-                }
-                */
+                post(endpoint, columnNumber, rowNumber, opts);
 
                 // Move to the next column
                 columnNumber++; 
