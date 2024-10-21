@@ -2,9 +2,9 @@
  *
  * src/app.ts
  *
- * Makes `POST` requests to Crossmint's Megaverse service to build a map
- *
- *
+ * Makes `POST` requests to Crossmint's Megaverse service to build a map based
+ * off a `GET` request to the service's endpoint `/map/.../goal`, which returns
+ * a "Goal" map. 
  *
  */
 
@@ -20,19 +20,28 @@ const MAKE_REQUEST = process.env.MAKE_REQUEST;
 
 
 // The Goal map can be fetched with a HTTP `GET` request to the service's
-// endpoint, `/api/map.` This map is formatted as JSON data. When parsed, 
-// it creates a 2D space, or an array-based matrix, of "Rows" and "Columns."
+// endpoint, `/api/map,` if a Candidate ID is passed to the request. You can 
+// obtain a Candidate ID from a recruiter.
+//
+// This resulting response's data from the request is formatted with JSON. When
+// parsed, it creates a 2D space, or an array-based matrix, of "Rows" and 
+// "Columns," which can be formed into a Map.
 https.get(GOAL, (res) => {
-
+    
+    // The readable stream for the response can be a set of chunks, thus we must 
+    // read all parts of it (i.e: `res.on('data', ...`) before we can, upon the 
+    // response's end, take action on the Goal map.
     let rawMap = "";
-    // The readable stream for the Goal map's response can be a set of chunks,
-    // thus we must read all parts of it (i.e: `res.on('data', ...`) before we
-    // can, upon the response's end, take action on the Goal map
     res.on('data', (data) => {
-        // Upon inspecting the headers of responses from Crossmint's Megaverse 
+        // Inspecting the headers of responses from Crossmint's Megaverse 
         // service, I found the character set to be `utf-8.` As a result, we can 
-        // simply convert incoming raw data buffers from Crossmint via `utf-8`, 
-        // as is necessary when making `https` requests with `Node.`
+        // simply pass this character set to convert incoming raw data buffers 
+        // from Crossmint service. Otherwise, the raw returned `ClientRequest` 
+        // readable Stream is what we would have to work with when creating a
+        // Map for the submission.
+        //
+        // Learn More:
+        // https://nodejs.org/api/http.html#class-httpclientrequest
         rawMap += data.toString('utf-8');
     });
 
