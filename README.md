@@ -3,7 +3,7 @@ Mint a Megaverse with Crossmint's Megaverse service
 
 Built for Crossmint's coding challenge, this repository uses the provided 
 Megaverse creator API to build 2D spaces of various "astral objects" (emojis) by
-making requests to Crossmint's Megaverse service.
+making requests to the API at `https://challenge.crossmint.com`.
 
 ## Getting Started
 ### Prequisites
