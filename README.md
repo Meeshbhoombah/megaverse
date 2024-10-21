@@ -5,58 +5,33 @@ Built for Crossmint's coding challenge, this repository uses the provided
 Megaverse creator API to build 2D spaces of various "astral objects" (emojis) by
 making requests to Crossmint's Megaverse service.
 
-## Breakdown
-Initally, we are presented with three types of astral objects:
-- POLYanets 🪐
-- SOLoons 🌙
-- comETHs ☄
-
-We must create a 2D space ourselves by making requests to Crossmint's megaverse
-service API.
-
-### The API
-Available at:
-```
-https://challenge.crossmint.io/api
-```
-
-With Crossmint's Megaverse service (a REST API), we can generate the different 
-astral objects, given that we pass the required `cadidateId` parameter to the
-service. This is provided to an interviewee via email.
-```
-https://challenge.crossmint.io/api?candidate_id={PROVIDED CANDIDATE ID}
-```
-
-### Polyanets
-- `POST` /polyanets
-    + Arguments: row, column
-
-
-### The Challenge
-Broken up into two phases
-
-### Phase One
-The first phase of the coding challenge has us looking to build
-
-
 ## Getting Started
 ### Prequisites
-- `npm`
-- `npx`
-- `node`
+- `npm` 10.8.3
+- `npx` 10.8.3
+- `node` v22.9.0
 
 ### Installation
-Clone this repository.
+Clone this repository. SSH example:
 ```
+git clone git@github.com:Meeshbhoombah/megaverse.git
+
+```
+
+Navigate to the cloned repository.
+```
+cd megaverse
 ```
 
 In the cloned repository, install megaverse via NPM.
 ```
+npm install
 ```
 
 ### Testing
-Copy `env`, rename it to `.env`, and add a candidate ID.
+Copy `env` to a `.env`, rename it to `.env`, and add a candidate ID.
 ```
+cp env .env
 ```
 
 Start megaverse
