@@ -19,6 +19,60 @@ const GOAL = API + `/map/${process.env.CANDIDATE_ID}/goal`;
 const MAKE_REQUEST = process.env.MAKE_REQUEST;
 
 
+/**
+ * Makes a `POST` request to the Crossmint Service
+ *
+ * @param {string} endpoint - one of the endpoints of the Crossmint service: 
+ *                 `/polyanets`, `/soloons`, or `/comeths`
+ *
+ * @param {string} rowNumber
+ * @param {string} columnNumber
+ *
+ * @param {object} args? - Endpoints `/soloons` and `/comeths` require further 
+ *                 arguments, respectively: `color` and `direction`
+ *                  
+ *                 e.g: args = { color: 'red' };
+ *               
+ */
+function post(
+    endpoint: string, 
+    rowNumber: number, 
+    columnNumber: number,
+    args?: object,
+) {
+
+    let data = JSON.stringify({
+        row: rowNumber,
+        column: columnNumber, 
+        candidateId: process.env.CANDIDATE_ID,
+        ...args
+    });
+
+    let options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(data),
+        }
+    };
+
+    let req = https.request(API + endpoint, options, (res) => {
+        console.log(res.statusCode);
+        if (res.statusCode == 429) {
+            post(endpoint, rowNumber, columnNumber, args);
+        }
+    });
+
+    req.on('error', (e) => {
+        console.error('`POST` request error: ', e.message);
+    });
+
+    req.write(data);
+    req.end();
+
+};
+
+
 // The Goal map can be fetched with a HTTP `GET` request to the service's
 // endpoint, `/api/map,` if a Candidate ID is passed to the request. You can 
 // obtain a Candidate ID from a recruiter.
@@ -65,7 +119,7 @@ https.get(GOAL, (res) => {
                 // to its corresponding `endpoint,` as is specified by
                 // Crossmint's provided API 
                 let endpoint!: string;
-                let opts!: object;
+                let args!: object;
 
                 if (entity == 'POLYANET') {
                     endpoint = '/polyanets'; 
@@ -77,19 +131,19 @@ https.get(GOAL, (res) => {
                     
                     switch(entity[0]) {
                         case 'B': {
-                            opts = { color: 'blue' };
+                            args = { color: 'blue' };
                             break;
                         }
                         case 'R': {
-                            opts = { color: 'red' };
+                            args = { color: 'red' };
                             break;
                         }
                         case 'P': {
-                            opts = { color: 'purple' };
+                            args = { color: 'purple' };
                             break;
                         } 
                         case 'W': {
-                            opts = { color: 'white' };
+                            args = { color: 'white' };
                             break;
                         }
                     }
@@ -102,19 +156,19 @@ https.get(GOAL, (res) => {
 
                     switch(entity[0]) {
                         case 'U': {
-                            opts = { direction: 'up' };
+                            args = { direction: 'up' };
                             break;
                         }
                         case 'D': {
-                            opts = { direction: 'down' };
+                            args = { direction: 'down' };
                             break;
                         }
                         case 'L': {
-                            opts = { direction: 'left' };
+                            args = { direction: 'left' };
                             break;
                         }
                         case 'R': {
-                            opts = { direction: 'right' };
+                            args = { direction: 'right' };
                             break;
                         }
                     }
@@ -126,7 +180,7 @@ https.get(GOAL, (res) => {
                     process.stdout.write('🌌 ');                
                 };
 
-                post(endpoint, columnNumber, rowNumber, opts);
+                post(endpoint, columnNumber, rowNumber, args);
 
                 // Move to the next column
                 columnNumber++; 
@@ -146,44 +200,4 @@ https.get(GOAL, (res) => {
     });
 
 });
-
-
-function post(
-    endpoint: string, 
-    rowNumber: number, 
-    columnNumber: number,
-    opts?: object,
-) {
-
-    let data = JSON.stringify({
-        row: rowNumber,
-        column: columnNumber, 
-        candidateId: process.env.CANDIDATE_ID,
-        ...opts
-    });
-
-    let options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': Buffer.byteLength(data),
-        }
-    };
-
-    let req = https.request(API + endpoint, options, (res) => {
-        console.log(res.statusCode);
-        if (res.statusCode == 429) {
-            post(endpoint, rowNumber, columnNumber, opts);
-        }
-    });
-
-    req.on('error', (e) => {
-        console.error('`POST` request error: ', e.message);
-    });
-
-    req.write(data);
-    req.end();
-
-};
-
 
