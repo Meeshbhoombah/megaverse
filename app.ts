@@ -3,8 +3,8 @@
  * src/app.ts
  *
  * Makes `POST` requests to Crossmint's Megaverse service to build a map based
- * off a `GET` request to the service's endpoint `/map/.../goal`, which returns
- * a "Goal" map. 
+ * off a `GET` request to the service's endpoint `/map/{CANDIDATE_ID}/goal`, 
+ * which returns a "Goal" map to be recreated through these `POST` requests
  *
  */
 
@@ -13,25 +13,32 @@ import * as fs from 'fs';
 import * as process from 'process';
 
 
+// URL for the Crossmint Megaverse service API
 const API = 'https://challenge.crossmint.com/api';
+// The targeted map that `megaverse` will recreate by making post requests to 
+// Crossmint's Megaverse service, requestable from the service via a `GET` 
+// request with a `CANDIADATE_ID` given to a Candidate from a recruiter in an
+// email to the interviewee
 const GOAL = API + `/map/${process.env.CANDIDATE_ID}/goal`;
 
 const MAKE_REQUEST = process.env.MAKE_REQUEST;
 
 
 /**
- * Makes a `POST` request to the Crossmint Service
+ *
+ * Helper function, makes a `POST` request to the Crossmint Service, placing an 
+ * entity at a specific coordinate point (rowNumber, columnNumber) in a 
+ * creatable map
  *
  * @param {string} endpoint - one of the endpoints of the Crossmint service: 
  *                 `/polyanets`, `/soloons`, or `/comeths`
- *
  * @param {string} rowNumber
  * @param {string} columnNumber
- *
- * @param {object} args? - Endpoints `/soloons` and `/comeths` require further 
- *                 arguments, respectively: `color` and `direction`
- *                  
- *                 e.g: args = { color: 'red' };
+ * @param {object} args? - Some endpoints (i.e: `/soloons` and `/comeths`) 
+ *                 require further arguments, respectively: `color` and 
+ *                 `direction`, which can be sent to the Crossmint service by 
+ *                 passing an object assigning the key of said argument to the
+ *                 requisite value (e.g: args = { color: 'red' }
  *               
  */
 function post(
