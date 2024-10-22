@@ -28,7 +28,8 @@ const MAKE_REQUEST = process.env.MAKE_REQUEST;
  *
  * Helper function, makes a `POST` request to the Crossmint Service, placing an 
  * entity at a specific coordinate point (rowNumber, columnNumber) in a 
- * creatable map
+ * creatable map obfuscated by the API we are posting to (i.e: the map is 
+ * located in Crossmint's service, and `megaverse` works with it abstractly).
  *
  * @param {string} endpoint - one of the endpoints of the Crossmint service: 
  *                 `/polyanets`, `/soloons`, or `/comeths`
