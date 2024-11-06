@@ -65,16 +65,9 @@ function post(
     };
 
     let req = https.request(API + endpoint, options, (res) => {
-
-        console.log('POST: ', endpoint);
-        console.log(options);
-        console.log(res.statusCode);
-        console.log(res.headers);
-
         if (res.statusCode == 429) {
             post(endpoint, rowNumber, columnNumber, args);
         }
-
     });
 
     req.on('error', (e) => {
@@ -140,6 +133,7 @@ https.get(GOAL, (res) => {
                     process.stdout.write('🪐 ');
                 }
 
+
                 if (entity.slice(-6) == 'SOLOON') {
                     endpoint = '/soloons';
                     
@@ -164,6 +158,7 @@ https.get(GOAL, (res) => {
 
                     process.stdout.write('🌕 ');
                 }
+
 
                 if (entity.slice(-6) == 'COMETH') {
                     endpoint = '/comeths';
@@ -190,9 +185,11 @@ https.get(GOAL, (res) => {
                     process.stdout.write('☄️ ');
                 }
 
+
                 if (entity == 'SPACE') {
                     process.stdout.write('🌌 ');                
                 };
+
 
                 post(endpoint, columnNumber, rowNumber, args);
 
